@@ -50,7 +50,7 @@ router.post('/users', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /:
+ * /auth:
  *   post:
  *     summary: Autentica um usuário
  *     description: Endpoint para autenticar um usuário com email e senha.
