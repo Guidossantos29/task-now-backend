@@ -4,8 +4,9 @@ import createUserController from "./controllers/user/createUserController";
 import authServiceController from "./controllers/user/authUserController";
 
 import createTaskController from "./controllers/task/createTaskController";
+import getAllTaskController from "./controllers/task/getAllTaskController";
 
-const router = Router()
+const router = Router();
 
 /**
  * @swagger
@@ -42,7 +43,7 @@ router.post('/users', async (req: Request, res: Response) => {
 
     } catch (error) {
         if (error instanceof Error) {
-            res.json({ error: error.message })
+            res.status(500).json({ error: error.message })
         }
 
     }
@@ -94,7 +95,7 @@ router.post('/auth', async (req: Request, res: Response) => {
         await authUser.handle;
     } catch (error) {
         if (error instanceof Error) {
-            res.json({ error: error.message });
+            res.status(500).json({ error: error.message });
         }
     }
 });
@@ -153,7 +154,54 @@ router.post('/auth', async (req: Request, res: Response) => {
 router.post('/task', async (req: Request, res: Response) => {
     const newTask = new createTaskController();
     try {
-        await newTask.handle(req, res); 
+        await newTask.handle(req, res);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+});
+
+
+/**
+ * @swagger
+ * /tasks:
+ *   get:
+ *     summary: Retorna todas as tarefas
+ *     description: Endpoint para listar todas as tarefas cadastradas.
+ *     responses:
+ *       200:
+ *         description: Lista de tarefas retornada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: ID único da tarefa.
+ *                     example: "6f84e72e-fb3b-11ec-a6c8-02b9d6637295"
+ *                   title:
+ *                     type: string
+ *                     description: Título da tarefa.
+ *                     example: "Minha nova tarefa"
+ *                   completed:
+ *                     type: boolean
+ *                     description: Status de conclusão da tarefa.
+ *                     example: false
+ *                   userId:
+ *                     type: string
+ *                     description: ID do usuário associado à tarefa.
+ *                     example: "123e4567-e89b-12d3-a456-426614174000"
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+router.get('/tasks', async (req: Request, res: Response) => {
+    const getTasks = new getAllTaskController();
+    try {
+        await getTasks.handle(req, res);
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message });
