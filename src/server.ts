@@ -11,6 +11,8 @@ const PORT = 3000
 
 const app = express();
 
+app.use(express.json());
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(router);
 app.listen(PORT,() => {

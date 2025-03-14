@@ -39,7 +39,7 @@ const router = Router();
 router.post('/users', async (req: Request, res: Response) => {
     const newUser = new createUserController()
     try {
-        await newUser.handle
+        await newUser.handle(req,res)
 
     } catch (error) {
         if (error instanceof Error) {
