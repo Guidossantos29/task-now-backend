@@ -5,6 +5,7 @@ import authServiceController from "./controllers/user/authUserController";
 
 import createTaskController from "./controllers/task/createTaskController";
 import getAllTaskController from "./controllers/task/getAllTaskController";
+import updateTaskController from "./controllers/task/updateTaskController";
 
 const router = Router();
 
@@ -208,6 +209,67 @@ router.get('/tasks', async (req: Request, res: Response) => {
         }
     }
 });
+
+/**
+ * @swagger
+ * /task-update:
+ *   put:
+ *     summary: Atualiza uma tarefa existente
+ *     description: Endpoint para atualizar o título de uma tarefa existente.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID da tarefa a ser atualizada.
+ *                 example: "6f84e72e-fb3b-11ec-a6c8-02b9d6637295"
+ *               title:
+ *                 type: string
+ *                 description: Novo título da tarefa.
+ *                 example: "Título atualizado da tarefa"
+ *     responses:
+ *       200:
+ *         description: Tarefa atualizada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: ID da tarefa.
+ *                   example: "6f84e72e-fb3b-11ec-a6c8-02b9d6637295"
+ *                 title:
+ *                   type: string
+ *                   description: Título atualizado da tarefa.
+ *                   example: "Título atualizado da tarefa"
+ *                 completed:
+ *                   type: boolean
+ *                   description: Status da tarefa.
+ *                   example: false
+ *       400:
+ *         description: Requisição inválida, ID ou título ausente.
+ *       404:
+ *         description: Tarefa não encontrada.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+router.put("/task-update", async(req: Request,res: Response) => {
+    const update = new updateTaskController()
+
+    try{
+        await update.handle(req,res)
+
+    } catch(error){
+        if(error instanceof Error){
+            res.status(500).json({error: error.message})
+        }
+    }
+})
 
 
 export { router }
