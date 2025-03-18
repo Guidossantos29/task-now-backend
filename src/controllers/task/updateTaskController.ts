@@ -7,12 +7,12 @@ class updateTaskController {
 
         const updateTask = new updateTaskService()
 
-        const Task = updateTask.execute({
+        const task = updateTask.execute({
             id,
             title
         })
 
-        return Task
+        return res.json(task)
 
     }
 

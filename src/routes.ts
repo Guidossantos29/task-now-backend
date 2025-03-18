@@ -6,6 +6,7 @@ import authServiceController from "./controllers/user/authUserController";
 import createTaskController from "./controllers/task/createTaskController";
 import getAllTaskController from "./controllers/task/getAllTaskController";
 import updateTaskController from "./controllers/task/updateTaskController";
+import deleteTaskController from "./controllers/task/deleteTaskController";
 
 const router = Router();
 
@@ -93,7 +94,7 @@ router.post('/users', async (req: Request, res: Response) => {
 router.post('/auth', async (req: Request, res: Response) => {
     const authUser = new authServiceController();
     try {
-        await authUser.handle;
+        await authUser.handle(req,res);
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message });
@@ -264,6 +265,53 @@ router.put("/task-update", async(req: Request,res: Response) => {
     try{
         await update.handle(req,res)
 
+    } catch(error){
+        if(error instanceof Error){
+            res.status(500).json({error: error.message})
+        }
+    }
+})
+
+/**
+ * @swagger
+ * /task-delete:
+ *   delete:
+ *     summary: Deleta uma tarefa existente
+ *     description: Endpoint para deletar uma tarefa pelo ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID da tarefa a ser deletada.
+ *                 example: "6f84e72e-fb3b-11ec-a6c8-02b9d6637295"
+ *     responses:
+ *       200:
+ *         description: Tarefa deletada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Mensagem de confirmação.
+ *                   example: "Tarefa deletada com sucesso"
+ *       400:
+ *         description: Requisição inválida, ID ausente.
+ *       404:
+ *         description: Tarefa não encontrada.
+ *       500:
+ *         description: Erro interno do servidor.
+ */
+router.delete("/task-delete", async(req:Request,res:Response) => {
+    const deleteTask = new deleteTaskController();
+    try{
+        await deleteTask.handle(req,res)
     } catch(error){
         if(error instanceof Error){
             res.status(500).json({error: error.message})
