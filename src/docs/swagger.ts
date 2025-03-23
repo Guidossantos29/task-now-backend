@@ -13,6 +13,10 @@ const swaggerOptions = {
         url: "http://localhost:3000",
         description: "Servidor local",
       },
+      {
+        url: "https://task-now-backend-production.up.railway.app/",
+        description: "Servidor em Produção",
+      },
     ],
   },
   apis: ["src/routes.ts"],
